@@ -1,0 +1,28 @@
+{
+  "name": "employee-tracker",
+  "version": "1.0.0",
+  "description": "Employee database application with user interface",
+  "main": "server.js",
+  "scripts": {
+    "test": "jest",
+    "migrate": "sqlite3 db/employee.db < db/schema.sql",
+    "seed": "sqlite3 db/employee.db < db/seeds.sql",
+    "db": "sqlite3 db/employee.db",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hansonjw/employee-tracker.git"
+  },
+  "author": "Justin Hansaon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hansonjw/employee-tracker/issues"
+  },
+  "homepage": "https://github.com/hansonjw/employee-tracker#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "inquirer": "^7.3.3",
+    "sqlite3": "^5.0.0"
+  }
+}
