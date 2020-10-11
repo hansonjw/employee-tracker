@@ -66,22 +66,63 @@ function viewEmployees(db) {
 
 
 // ADD A DEPARTMENT
-function addDepartment(db) {
+async function addDepartment(db) {
     const sql = `INSERT INTO departments (dep_name) VALUES (?);`;
-    const params = ['Electric Ladyland 5'];
-    db.query(sql, params, (err, result) => {
+    
+    let answerDepartment = await inquirer.prompt([
+        {
+            type: 'input',
+            name: 'selection',
+            message: 'What is the name of the new Department?',
+            default: 'TBD - NEW DEPARTMENT'
+        }
+        ]);
+
+    const params = [answerDepartment.selection];
+    
+    await db.promise().query(sql, params, (err, result) => {
         if (err) throw err;
     });
 };
 
 
 // ADD A ROLE
-function addRole(db) {
-    const sql = `INSERT INTO roles (title, salary, department_id)
-    VALUES (?, ?, ?);`;
-    const params = ['Lead Guitarist', 1000000, 1];
+async function addRole(db) {
+    const sql = `INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?);`;
+    const departmentList = {};
 
-    db.query(sql, params, (err, result) => {
+    let departmentData = await db.promise().query('SELECT * FROM departments');
+    departmentData[0].forEach(department => departmentList[department.dep_name] = department.id);
+
+    let title = await inquirer.prompt([
+        {
+            type: 'input',
+            name: 'selection',
+            message: 'What is the job title for this new role?',
+            default: 'TBD'
+        }
+        ]);
+    let salary = await inquirer.prompt([
+        {
+            type: 'input',
+            name: 'selection',
+            message: 'What is the salary for this new role?',
+            default: 'TBD'
+        }
+        ]); 
+    let answerDepartment = await inquirer.prompt([
+        {
+            type: 'list',
+            name: 'selection',
+            message: 'What department will this new role fall under?',
+            choices: Object.keys(departmentList)
+        }
+        ]);
+
+
+    const params = [title.selection, salary.selection, departmentList[answerDepartment.selection]];
+    
+    await db.promise().query(sql, params, (err, result) => {
         if (err) throw err;
     });
 };
