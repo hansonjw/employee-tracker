@@ -2,7 +2,6 @@
 const express = require('express');
 const PORT = process.env.PORT || 3001;
 const app = express();
-// const sqlite3 = require('sqlite3').verbose();
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
 const {viewDepartments, viewRoles, viewEmployees, addDepartment, addRole, addEmployee, updateEmployeeRole} = require('./utils/query.js')
@@ -10,13 +9,7 @@ const {viewDepartments, viewRoles, viewEmployees, addDepartment, addRole, addEmp
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-// connect to the database...
-// const db = new sqlite3.Database('./db/employee.db', err => {
-//     if (err) {
-//         return console.error(err.message);
-//     }
-//     console.log('Connected to the employee database.');
-// })
+// Connect to database
 const db = mysql.createConnection({
     host: 'localhost',
     port: 3306,
@@ -49,6 +42,7 @@ const mainPrompt = [
 
 
 async function handleResponse(selection) {
+    console.clear();
     switch (selection) {
         case mainOptions[0]:
             await viewDepartments(db);
@@ -78,8 +72,8 @@ async function handleResponse(selection) {
     init();
 };
 
-function init() {
-    inquirer.prompt(mainPrompt)
+async function init() {
+    await inquirer.prompt(mainPrompt)
     .then(ans => handleResponse(ans.selection));
 }
 

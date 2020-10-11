@@ -171,9 +171,6 @@ async function addEmployee(db) {
             choices: Object.keys(roleList)
         }
         ]);
-
-    console.log(firstName.selection, lastName.selection, roleList[answerRole.selection], managerList[answerManager.selection]);
-
     
     const sql = `INSERT INTO employees (first_name, last_name, role_id, manager_id)
     VALUES (?, ?, ?, ?);`;
@@ -193,19 +190,9 @@ async function updateEmployeeRole(db) {
     const employeeList = {};
     const roleList = {};
     let employeeData = await db.promise().query(`SELECT * FROM employees;`);
-    // if(!employeeData.ok) {
-    //     console.log("ERROR");
-    // } else{
-    //     employeeData[0].forEach(employee => employeeList[employee.first_name + ' ' + employee.last_name] = employee.id);
-    // }
     employeeData[0].forEach(employee => employeeList[employee.first_name + ' ' + employee.last_name] = employee.id);
 
     let roleData = await db.promise().query('SELECT * FROM roles');
-    // if(!roleData.ok) {
-    //     console.log("ERROR");
-    // } else{
-    //     roleData[0].forEach(role => roleList[role.title] = role.id);
-    // }
     roleData[0].forEach(role => roleList[role.title] = role.id);
 
     let answerEmployee = await inquirer.prompt([
@@ -224,7 +211,6 @@ async function updateEmployeeRole(db) {
                     choices: Object.keys(roleList)
                 }
                 ]);
-    console.log(employeeList[answerEmployee.selection], roleList[answerRole.selection]);
    
     const sql = `UPDATE employees SET role_id = (?) WHERE id = (?);`;
     params = [roleList[answerRole.selection], employeeList[answerEmployee.selection]]

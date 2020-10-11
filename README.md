@@ -1,6 +1,9 @@
 # Employee Tracker
 Employee database management interface program
 
+## Instructions / Walkthrough Video
+    https://drive.google.com/file/d/1H6sDC8kmrl5GhAloaqFzu9hKhmJ_58oe/view
+
 ## Application and User Story
 AS A business owner
 I WANT to be able to view and manage the departments, roles, and employees in my company
