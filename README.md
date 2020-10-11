@@ -5,7 +5,7 @@ Employee database management interface program that is accessed through the comm
 ## Instructions / Walkthrough Video
     https://drive.google.com/file/d/1H6sDC8kmrl5GhAloaqFzu9hKhmJ_58oe/view
 
-This application provides a command line interface to manage and employee database.  Options such as
+This application provides a command line interface to manage an employee database.  Options such as
 entering new employees, creating new departments, and creating new positions or roles are available.
 To run the program navigate to the root directory of the application and enter the following into the
 command line prompt: node server.js
@@ -45,11 +45,12 @@ command line prompt: node server.js
 
   ### - update an employee role --
     Need to figure out what to do with this one...not exactly clear...I believe
-    the program is to present a list of employees...then when an employee is selected then a list of roles is present.  When a new role is selected the database is updated??
+    the program is to present a list of employees...then when an employee is selected then a list of roles is present.
+    When a new role is selected the database is updated??
 
 
 ## Dependencies:
-- You’ll need to use:
+To run this application you’ll need to use:
 - MySQL2 package
 - Inquirer package
 - console.table package (Links to an external site.) to print MySQL rows to the console.
