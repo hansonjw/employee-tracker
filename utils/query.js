@@ -138,8 +138,13 @@ async function updateEmployeeRole(db) {
                     choices: Object.keys(roleList)
                 }
                 ]);
-    console.log(answerEmployee, answerRole);
-    
+    console.log(employeeList[answerEmployee.selection], roleList[answerRole.selection]);
+   
+    const sql = `UPDATE employees SET role_id = (?) WHERE id = (?);`;
+    params = [roleList[answerRole.selection], employeeList[answerEmployee.selection]]
+    await db.promise().query(sql, params, (err, result) => {
+        if (err) throw err;
+    });
 }
 
 

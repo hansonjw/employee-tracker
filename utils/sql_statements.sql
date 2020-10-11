@@ -46,3 +46,9 @@ VALUES (?);
 -- ADD ROLE
 INSERT INTO roles (salary, title, department_id)
 VALUES (?, ?, ?);
+
+
+-- UPDATE ROLE
+UPDATE employees
+SET role_id = ?
+WHERE id = ?;
