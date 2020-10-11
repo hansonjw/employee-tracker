@@ -1,17 +1,16 @@
-# Employee Tracker
-Employee database management interface program
+# Employee Database Application
+Employee database management interface program that is accessed through the command line.
+![Screenshot of the main applicatin window](./utils/image_cl.png)
 
 ## Instructions / Walkthrough Video
     https://drive.google.com/file/d/1H6sDC8kmrl5GhAloaqFzu9hKhmJ_58oe/view
 
-## Application and User Story
-AS A business owner
-I WANT to be able to view and manage the departments, roles, and employees in my company
-SO THAT I can organize and plan my business
+This application provides a command line interface to manage and employee database.  Options such as
+entering new employees, creating new departments, and creating new positions or roles are available.
+To run the program navigate to the root directory of the application and enter the following into the
+command line prompt: node server.js
 
-GIVEN a command-line application that accepts user input
-WHEN I start the application
-THEN I am presented with the following options:
+## Main Menu Options in the application:
   
   ### - view all departments -- 
       WHEN I choose to view all departments
@@ -55,7 +54,7 @@ THEN I am presented with the following options:
 - Inquirer package
 - console.table package (Links to an external site.) to print MySQL rows to the console.
 
-## Database Structure and Schema:
+## Database Structure and Schema (for reference):
 ### Department
  - id: INT PRIMARY KEY
  - name: VARCHAR(30) to hold department name
