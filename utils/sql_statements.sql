@@ -9,13 +9,13 @@ SELECT
     M.first_name AS manager_firstname,
     M.last_name AS manager_lastname
 FROM
-    employees E,
-    employees M
+    employees E
+INNER JOIN employees M ON
+    E.manager_id = M.id
 LEFT JOIN roles ON
     E.role_id = roles.id
 LEFT JOIN departments ON
-    roles.department_id = departments.id
-WHERE E.manager_id = M.id;
+    roles.department_id = departments.id;
 
 
 

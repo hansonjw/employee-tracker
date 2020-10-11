@@ -1,18 +1,20 @@
+const inquirer = require('inquirer');
+const cTable = require('console.table');
+const { response } = require('express');
+
 function viewDepartments(db) {
     const sql = `SELECT
                     dep_name AS Department,
                     id AS 'Department ID'
                 FROM
                     departments;`
-    const params = [];
 
-    db.all(sql, params, (err, rows) => {
-        if (err) {
-        res.status(500).json({ error: err.message });
-    return;
-    }
-        console.log(rows);
+    db.query(sql, (err, result) => {
+        if (err) throw err;
+        console.log('\n');
+        console.log(cTable.getTable(result));
     });
+    return;
 };
 
 
@@ -25,21 +27,20 @@ function viewRoles(db) {
                 FROM roles
                 LEFT JOIN departments ON
                     roles.department_id = departments.id;`
-    const params = [];
 
-    db.all(sql, params, (err, rows) => {
-        if (err) {
-        res.status(500).json({ error: err.message });
-    return;
-    }
-        console.log(rows);
+    db.query(sql, (err, result) => {
+        if (err) throw err;
+        console.log('\n');
+        console.table(result);
     });
+    return;
 };
 
 
 function viewEmployees(db) {
 
-    const sql = `SELECT E.id,
+    const sql = `SELECT
+                    E.id,
                     E.first_name,
                     E.last_name,
                     roles.title,
@@ -47,35 +48,29 @@ function viewEmployees(db) {
                     departments.dep_name,
                     M.first_name AS manager_firstname,
                     M.last_name AS manager_lastname
-                FROM employees E, employees M
+                FROM
+                    employees E
+                INNER JOIN employees M ON
+                    E.manager_id = M.id
                 LEFT JOIN roles ON
                     E.role_id = roles.id
                 LEFT JOIN departments ON
-                    roles.department_id = departments.id
-                WHERE E.manager_id = M.id;`;
-    const params = [];
-
-    db.all(sql, params, (err, rows) => {
-        if (err) {
-        res.status(500).json({ error: err.message });
-    return;
-    }
-        console.log(rows);
+                    roles.department_id = departments.id;`;
+    db.query(sql, (err, result) => {
+        if (err) throw err;
+        console.log('\n');
+        console.table(result);
+        return;
     });
 };
 
 
 // ADD A DEPARTMENT
 function addDepartment(db) {
-    const sql = `INSERT INTO departments (dep_name)
-    VALUES (?);`;
-    const params = ['ElectricLadyLand2'];
-
-    db.run(sql, params, function (err, res) {
-        if (err) {
-            // res.status(400).json({ error: err.message });
-            return;
-        }
+    const sql = `INSERT INTO departments (dep_name) VALUES (?);`;
+    const params = ['Electric Ladyland 5'];
+    db.query(sql, params, (err, result) => {
+        if (err) throw err;
     });
 };
 
@@ -86,11 +81,8 @@ function addRole(db) {
     VALUES (?, ?, ?);`;
     const params = ['Lead Guitarist', 1000000, 1];
 
-    db.run(sql, params, function (err, res) {
-        if (err) {
-            res.status(400).json({ error: err.message });
-            return;
-        }
+    db.query(sql, params, (err, result) => {
+        if (err) throw err;
     });
 };
 
@@ -101,19 +93,53 @@ function addEmployee(db) {
     VALUES (?, ?, ?, ?);`;
     const params = ['Jennifer', 'Aniston', 1, 1];
 
-    db.run(sql, params, function (err, res) {
+    db.query(sql, params, (err, result) => {
         if (err) throw err;
-        console.log("employee added");
     });
 };
 
 
 // UPDATE AN EMPLOYEE
-function updateEmployeeRole(db) {
-    // query database array of employees
-    // query database for array of roles
-    // list of questions for 
-    console.log("This is the employee update function!");
+async function updateEmployeeRole(db) {
+    const employeeList = {};
+    const roleList = {};
+    let employeeData = await db.promise().query(`SELECT * FROM employees;`);
+    // if(!employeeData.ok) {
+    //     console.log("ERROR");
+    // } else{
+    //     employeeData[0].forEach(employee => employeeList[employee.first_name + ' ' + employee.last_name] = employee.id);
+    // }
+    employeeData[0].forEach(employee => employeeList[employee.first_name + ' ' + employee.last_name] = employee.id);
+
+    let roleData = await db.promise().query('SELECT * FROM roles');
+    // if(!roleData.ok) {
+    //     console.log("ERROR");
+    // } else{
+    //     roleData[0].forEach(role => roleList[role.title] = role.id);
+    // }
+    roleData[0].forEach(role => roleList[role.title] = role.id);
+
+    console.log(employeeList);
+    console.log(roleList);
+
+    let answerEmployee = await inquirer.prompt([
+                {
+                    type: 'list',
+                    name: 'selection',
+                    message: 'Which employee would you like to update?',
+                    choices: Object.keys(employeeList)
+                }
+                ]);
+    let answerRole = await inquirer.prompt([
+                {
+                    type: 'list',
+                    name: 'selection',
+                    message: 'Which new role should this employee have?',
+                    choices: Object.keys(roleList)
+                }
+                ]);
+    console.log(answerEmployee, answerRole);
+    
 }
 
 

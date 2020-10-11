@@ -48,40 +48,31 @@ const mainPrompt = [
 ];
 
 
-function handleResponse(selection) {
-    console.log("Hey good choice, you chose: ");
+async function handleResponse(selection) {
     switch (selection) {
         case mainOptions[0]:
-            console.log(mainOptions[0]);
-            viewDepartments(db);
+            await viewDepartments(db);
             break;
         case mainOptions[1]:
-            console.log(mainOptions[1]);
-            viewRoles(db);
+            await viewRoles(db);
             break;
         case mainOptions[2]:
-            console.log(mainOptions[2]);
-            viewEmployees(db);
+            await viewEmployees(db);
             break;
         case mainOptions[3]:
-            console.log(mainOptions[3]);
-            addDepartment(db);
+            await addDepartment(db);
             break;
         case mainOptions[4]:
-            console.log(mainOptions[4]);
-            addRole(db);
+            await addRole(db);
             break;
         case mainOptions[5]:
-            console.log(mainOptions[5]);
-            addEmployee(db);
+            await addEmployee(db);
             break;
         case mainOptions[6]:
-            console.log(mainOptions[6]);
-            updateEmployeeRole(db);
+            await updateEmployeeRole(db);
             break;
         case mainOptions[7]:
-            console.log(mainOptions[7]);
-            db.close();
+            db.end();
             return;
     }   
     init();
