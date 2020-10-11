@@ -55,6 +55,7 @@ command line prompt: node server.js
 - console.table package (Links to an external site.) to print MySQL rows to the console.
 
 ## Database Structure and Schema (for reference):
+![Image of schema](./utils/image_schema.png)
 ### Department
  - id: INT PRIMARY KEY
  - name: VARCHAR(30) to hold department name
