@@ -88,12 +88,60 @@ function addRole(db) {
 
 
 // ADD AN EMPLOYEE
-function addEmployee(db) {
+async function addEmployee(db) {
+    const managerList = {};
+    const roleList = {};
+
+    let managerData = await db.promise().query(`SELECT * FROM employees;`);
+    managerData[0].forEach(manager => managerList[manager.first_name + ' ' + manager.last_name] = manager.id);
+
+    let roleData = await db.promise().query('SELECT * FROM roles');
+    roleData[0].forEach(role => roleList[role.title] = role.id);
+
+    let firstName = await inquirer.prompt([
+        {
+            type: 'input',
+            name: 'selection',
+            message: 'What is the first name of the new employee?',
+            default: 'TBD'
+        }
+        ]);
+    let lastName = await inquirer.prompt([
+        {
+            type: 'input',
+            name: 'selection',
+            message: 'What is the last name of the new employee?',
+            default: 'TBD'
+        }
+        ]);
+    let answerManager = await inquirer.prompt([
+        {
+            type: 'list',
+            name: 'selection',
+            message: 'Who shall be the manager of this new employee?',
+            choices: Object.keys(managerList)
+        }
+        ]);
+    let answerRole = await inquirer.prompt([
+        {
+            type: 'list',
+            name: 'selection',
+            message: 'What new role will this new employee have?',
+            choices: Object.keys(roleList)
+        }
+        ]);
+
+    console.log(firstName.selection, lastName.selection, roleList[answerRole.selection], managerList[answerManager.selection]);
+
+    
     const sql = `INSERT INTO employees (first_name, last_name, role_id, manager_id)
     VALUES (?, ?, ?, ?);`;
-    const params = ['Jennifer', 'Aniston', 1, 1];
+    
+    // build logic for employee selection - first_name, last_name, ROLE, Manager
 
-    db.query(sql, params, (err, result) => {
+    const params = [firstName.selection, lastName.selection, roleList[answerRole.selection], managerList[answerManager.selection]];
+
+    await db.promise().query(sql, params, (err, result) => {
         if (err) throw err;
     });
 };
@@ -118,9 +166,6 @@ async function updateEmployeeRole(db) {
     //     roleData[0].forEach(role => roleList[role.title] = role.id);
     // }
     roleData[0].forEach(role => roleList[role.title] = role.id);
-
-    console.log(employeeList);
-    console.log(roleList);
 
     let answerEmployee = await inquirer.prompt([
                 {
