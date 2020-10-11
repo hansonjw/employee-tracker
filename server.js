@@ -2,7 +2,8 @@
 const express = require('express');
 const PORT = process.env.PORT || 3001;
 const app = express();
-const sqlite3 = require('sqlite3').verbose();
+// const sqlite3 = require('sqlite3').verbose();
+const mysql = require('mysql2');
 const inquirer = require('inquirer');
 const {viewDepartments, viewRoles, viewEmployees, addDepartment, addRole, addEmployee, updateEmployeeRole} = require('./utils/query.js')
 
@@ -10,12 +11,20 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 // connect to the database...
-const db = new sqlite3.Database('./db/employee.db', err => {
-    if (err) {
-        return console.error(err.message);
-    }
-    console.log('Connected to the employee database.');
-})
+// const db = new sqlite3.Database('./db/employee.db', err => {
+//     if (err) {
+//         return console.error(err.message);
+//     }
+//     console.log('Connected to the employee database.');
+// })
+const db = mysql.createConnection({
+    host: 'localhost',
+    port: 3306,
+    user: 'root',
+    password: 'NeilPeart20',
+    database: 'employee'
+});
+
 
 // Define first set of questions...array of objects...
 const mainOptions = [
